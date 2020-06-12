@@ -27,10 +27,15 @@ func GetCookie(w http.ResponseWriter, req *http.Request) *http.Cookie {
 
 //SetUserType sets the user type in cookie
 func SetUserType(w http.ResponseWriter, req *http.Request, uType string, fName string, uName string) {
-	c := GetCookie(w, req)
 
-	c.Value = c.Value + "|" + uType + "|" + fName + "|" + uName
-	http.SetCookie(w, c)
+	_, err := req.Cookie("user_info")
+	if err == http.ErrNoCookie {
+
+		c := GetCookie(w, req)
+		c.Value = c.Value + `|` + uType + `|` + fName + `|` + uName
+		http.SetCookie(w, c)
+	}
+
 }
 
 //GetUser returns the userdata

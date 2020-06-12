@@ -1,6 +1,7 @@
 package route
 
 import (
+	"fmt"
 	"net/http"
 
 	"../config"
@@ -10,7 +11,7 @@ import (
 //Index page
 func Index(w http.ResponseWriter, req *http.Request) {
 
-	if req.Method == http.MethodGet { //form sent via get
+	if req.Method == http.MethodPost { //form sent via post
 		userType := req.FormValue("userType")
 		familyName := req.FormValue("familyName")
 		userName := req.FormValue("userName")
@@ -19,10 +20,12 @@ func Index(w http.ResponseWriter, req *http.Request) {
 		config.SetUserType(w, req, userType, familyName, userName)
 
 		if userType == "customer" {
+			fmt.Println("user redirected to customer Page")
 			http.Redirect(w, req, "/customerPage", http.StatusTemporaryRedirect)
 		}
 
 		if userType == "seller" {
+			fmt.Println("user redirected to seller Page")
 			http.Redirect(w, req, "/sellerPage", http.StatusTemporaryRedirect)
 		}
 
@@ -35,35 +38,53 @@ func Index(w http.ResponseWriter, req *http.Request) {
 func CustomerPage(w http.ResponseWriter, req *http.Request) {
 
 	//get user data
-	userType, familyName, userName := config.GetUser(w, req)
+	_, fname, uname := config.GetUser(w, req)
 
 	currUser := models.User{
-		parentGroup: familyName,
-		name:        userName,
+		ParentGroup: fname,
+		Name:        uname,
 	}
+	//sanity check
+	fmt.Println("user accesed page: " + currUser.Name)
 
-	//list holding all items
-	var List []models.User
-
-	//query the family
-	rows, err := db.Query("SELECT items from customers where name = $1", fname)
-	if err != nil {
-		http.NotFound(w, req)
-	}
-
-	var s string
-	rows.Scan(&s)
-
+	//list to hold all items
+	var shoppingList []map[string]string
+	var err error
 	//get the updated items
-	var new_item string
-	if req.Method == http.MethodPost {
-		new_item = req.FormValue("new_item")
+	shoppingList, err = models.ReadItemsDB(w, req, currUser.ParentGroup)
+	if err != nil {
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		fmt.Println(err)
 	}
-
-	//display the row:
-	tpl.ExecuteTemplate(w, "familyPage.gohtml", nil)
+	//display items in page
+	config.Tpl.ExecuteTemplate(w, "customerPage.gohtml", shoppingList)
 }
 
+//AddItem handles the requests to add items
+func AddItem(w http.ResponseWriter, req *http.Request) {
+
+	//get user
+	_, fname, uname := config.GetUser(w, req)
+	currUser := models.User{
+		ParentGroup: fname,
+		Name:        uname,
+	}
+
+	if req.Method == http.MethodPost {
+		//read response from client
+		newItem := req.FormValue("item")
+		//add new item
+		err := models.InsertItem(w, req, currUser.ParentGroup, newItem, currUser.Name)
+		if err != nil {
+			fmt.Println(err)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
+		//sanity check
+		fmt.Println("item:" + newItem + " added by " + currUser.Name)
+	}
+}
+
+//SellerPage handler func
 func SellerPage(w http.ResponseWriter, req *http.Request) {
 	http.NotFound(w, req)
 	//TODO make page

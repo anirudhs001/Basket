@@ -1,12 +1,17 @@
 <html>
-    <body>
-        <div class="role">
-            <form id = "user" action="/" method="GET">
-                <input type="checkbox" value="family">
-                <input type="checkbox" value="seller">
-                <input type="text" placeholder="family_name" value="fname">
-                <input type="text" placeholder="user_name" value="uname">
-                <input type="submit" value="submit" >
-        </div>
-    </body>
+<body>
+    <div class="role">
+        <form id = "user" action="/" method="POST">
+            <label for="customer">family</label>
+            <input type="checkbox" name="userType" value="customer">
+            <br>
+            <label for="seller">seller</label>
+            <input type="checkbox" name="userType" value="seller">
+            <br>
+            <input type="text" placeholder="family_name" name="familyName" value="fname">
+            <input type="text" placeholder="user_name" name="userName" value="uname">
+            <input type="submit" value="submit" >
+        </form>
+    </div>
+</body>
 </html>

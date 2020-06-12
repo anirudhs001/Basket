@@ -2,8 +2,8 @@ package models
 
 //User struct
 type User struct {
-	parentGroup string
-	name        string
+	ParentGroup string
+	Name        string
 }
 
 type group struct {

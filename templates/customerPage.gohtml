@@ -1,8 +1,21 @@
 <html>
-    <body>
-        <form id="input">
-            <input type="text" id="item" placeholder="enter item here">
-            <input type="submit">
-        </form>
-    </body>
+<body>
+    <div id="input">
+        <!--TODO: record new item, send to server-->
+        <input type="text" id="newItem" placeholder="enter item here">
+        <button type="button" id="addItem">add</button>
+    </div>
+    <div id="list">
+        <!--TODO: load all items-->
+        {{ if .}}
+        {{.}}
+        {{end}}
+    </div>
+    <!--scripts here-->
+    <!--JQUERY-->
+    <script defer src ="/files/jquery-3.5.1.js"></script>
+    <script defer src ="/files/customerPage.js"></script>
+    <!--custom js-->
+    <!--scripts end here-->
+</body>
 </html>
