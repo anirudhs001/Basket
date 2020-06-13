@@ -5,11 +5,18 @@
         <input type="text" id="newItem" placeholder="enter item here">
         <button type="button" id="addItem">add</button>
     </div>
-    <div id="list">
-        <!--TODO: load all items-->
-        {{ if .}}
-        {{.}}
-        {{end}}
+    <div id = "items">
+        <ul id = "list">
+            <!--load all items-->
+            {{range .}}
+                <li>{{.Name}} - {{.Item}}
+                    <button type="button" class="listButton" id="{{.ID}}">del</button>
+                </li>
+            {{end}}
+        </ul>
+    </div>
+    <div>
+        <a href="/viewSellers">Send to Shop</a>
     </div>
     <!--scripts here-->
     <!--JQUERY-->

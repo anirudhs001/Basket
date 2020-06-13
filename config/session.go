@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"../models"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -39,7 +40,7 @@ func SetUserType(w http.ResponseWriter, req *http.Request, uType string, fName s
 }
 
 //GetUser returns the userdata
-func GetUser(w http.ResponseWriter, req *http.Request) (string, string, string) {
+func GetUser(w http.ResponseWriter, req *http.Request) (string, models.User) {
 
 	c := GetCookie(w, req)
 
@@ -48,5 +49,10 @@ func GetUser(w http.ResponseWriter, req *http.Request) (string, string, string) 
 	uType := l[1]
 	fName := l[2]
 	uName := l[3]
-	return uType, fName, uName
+
+	u := models.User{
+		ParentGroup: fName,
+		Name:        uName,
+	}
+	return uType, u
 }

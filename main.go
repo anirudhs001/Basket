@@ -11,6 +11,8 @@ func main() {
 	http.HandleFunc("/", route.Index)
 	http.HandleFunc("/customerPage", route.CustomerPage)
 	http.HandleFunc("/addItem", route.AddItem)
+	http.HandleFunc("/delItem", route.DelItem)
+	http.HandleFunc("/viewSellers", route.ViewSellers)
 	http.HandleFunc("/sellerPage", route.SellerPage)
 
 	http.Handle("/favicon.ico", http.NotFoundHandler())

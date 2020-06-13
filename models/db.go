@@ -2,8 +2,9 @@ package models
 
 import (
 	"database/sql"
+	"encoding/hex"
 	"fmt"
-	"net/http"
+	"math/rand"
 	"strings"
 
 	_ "github.com/lib/pq" //need the init function
@@ -25,11 +26,11 @@ func init() {
 }
 
 //ReadItemsDB reads database and returns all the items
-func ReadItemsDB(w http.ResponseWriter, req *http.Request, familyName string) ([]map[string]string, error) {
+func ReadItemsDB(familyName string) ([]Item, error) {
 
 	//query the family
-	s, err := getRow(w, familyName)
-	var items []map[string]string
+	s, err := getCustomerRow(familyName)
+	var items []Item
 	if err != nil {
 		return items, err
 	}
@@ -38,42 +39,102 @@ func ReadItemsDB(w http.ResponseWriter, req *http.Request, familyName string) ([
 	if s != "" {
 		li := strings.Split(s, "\n")
 		for _, v := range li {
-			user := strings.Split(v, "\t")[0]
-			item := strings.Split(v, "\t")[1]
-			items = append(items, map[string]string{
-				user: item,
-			})
+			if v != "" {
+
+				id := strings.Split(v, "|")[0]
+				user := strings.Split(v, "|")[1]
+				item := strings.Split(v, "|")[2]
+				items = append(items, Item{
+					ID:   id,
+					Name: user,
+					Item: item,
+				})
+			}
 		}
 	}
 	return items, err
 }
 
 //InsertItem appends the item to a familyrow in database
-//also takes care of error handling
-func InsertItem(w http.ResponseWriter, req *http.Request, familyName string, item string, user string) error {
+//returns the new items ID and nil if succesfull
+//otherwise returns an emty string and the error if any
+func InsertItem(familyName string, item string, user string) (string, error) {
 
 	//query the row
-	s, err := getRow(w, familyName)
+	s, err := getCustomerRow(familyName)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	//add new item
-	s = s + "\n" + user + "\t" + item
+	b := make([]byte, 5)
+	rand.Read(b)
+	id := hex.EncodeToString(b)
+	s = s + id + "|" + user + "|" + item + "\n"
 
-	_, err = db.Exec(`UPDATE customers set items = $1 where name = $2;`, s, familyName)
+	err = updateRow(s, familyName)
+	if err != nil {
+		return "", err
+	}
 
+	return id, err
+}
+
+//DeleteItem an item identified by its ID
+func DeleteItem(familyName string, itemID string) error {
+
+	s, err := getCustomerRow(familyName)
 	if err != nil {
 		return err
 	}
-	fmt.Println("item added to familygroup:" + familyName)
+
+	var sNew string //string to hold update items list
+	if s != "" {
+		li := strings.Split(s, "\n")
+		for _, v := range li {
+			if v != "" {
+				id := strings.Split(v, "|")[0]
+				if id == itemID { //delete this row
+					v = ""
+				}
+				sNew += v + "\n"
+			}
+		}
+	}
+
+	//write row to db
+	err = updateRow(sNew, familyName)
+
 	return err
 }
 
-func getRow(w http.ResponseWriter, familyName string) (string, error) {
+//ReadSellersDB returns a list of sellers
+func ReadSellersDB() ([]Seller, error) {
+
+	var listOfSellers []Seller
+	var s Seller
+
+	rows, err := getSellerRows()
+	if err != nil {
+		return listOfSellers, err
+	}
+
+	for rows.Next() {
+		if err = rows.Scan(&s.ID, &s.Name, &s.Addr, &s.OpenTime, &s.CloseTime); err != nil {
+			return listOfSellers, err
+		}
+		listOfSellers = append(listOfSellers, s)
+	}
+	return listOfSellers, err
+}
+
+//reads DB and sends items in row if found
+// if row not found, creates one too
+// if an error occurs, returns an empty string and the err
+func getCustomerRow(familyName string) (string, error) {
 
 	//query the family, create if does not exist
-	row := db.QueryRow("SELECT items from customers where name = '$1';", familyName)
+	row := db.QueryRow("SELECT items from customers where name = $1;", familyName)
 	var err error
 	var s string
 	if err := row.Scan(&s); err != nil {
@@ -81,13 +142,18 @@ func getRow(w http.ResponseWriter, familyName string) (string, error) {
 		if err == sql.ErrNoRows { // if row not found
 			//create a new row
 			err = nil
-			_, err = db.Exec("INSERT into customers (name items) VALUES ('$1' '$2');", familyName, "")
+			_, err = db.Exec("INSERT into customers (name,items) VALUES ($1,$2);", familyName, "")
 			//sanity check
 			if err != nil {
 				return "", err
 			}
-			fmt.Println("row created!")
 		}
 	}
 	return s, err
+}
+
+func getSellerRows() (*sql.Rows, error) {
+
+	rows, err := db.Query("Select * from sellers")
+	return rows, err
 }

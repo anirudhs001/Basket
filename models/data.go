@@ -6,6 +6,17 @@ type User struct {
 	Name        string
 }
 
+//Item struct
+type Item struct {
+	ID, Name, Item string
+}
+
+//Seller struct
+type Seller struct {
+	ID, Name, Addr      string
+	OpenTime, CloseTime int
+}
+
 type group struct {
 	id    string
 	users []User

@@ -1,0 +1,21 @@
+<html>
+<body>
+    <div>
+        <h2>
+            Sellers in you area
+        </h2>
+    </div>
+    <ul>
+        {{if .}}
+            {{range .}}
+            <li>
+                {{.ID}}
+                {{.Name}}, 
+                {{.Addr}},
+                {{.OpenTime}}-{{.CloseTime}}
+            </li>
+            {{end}}
+        {{end}}
+    </ul>
+</body>
+</html>

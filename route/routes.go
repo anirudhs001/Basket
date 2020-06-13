@@ -38,20 +38,16 @@ func Index(w http.ResponseWriter, req *http.Request) {
 func CustomerPage(w http.ResponseWriter, req *http.Request) {
 
 	//get user data
-	_, fname, uname := config.GetUser(w, req)
+	_, currUser := config.GetUser(w, req)
 
-	currUser := models.User{
-		ParentGroup: fname,
-		Name:        uname,
-	}
 	//sanity check
 	fmt.Println("user accesed page: " + currUser.Name)
 
 	//list to hold all items
-	var shoppingList []map[string]string
+	var shoppingList []models.Item
 	var err error
 	//get the updated items
-	shoppingList, err = models.ReadItemsDB(w, req, currUser.ParentGroup)
+	shoppingList, err = models.ReadItemsDB(currUser.ParentGroup)
 	if err != nil {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 		fmt.Println(err)
@@ -64,24 +60,53 @@ func CustomerPage(w http.ResponseWriter, req *http.Request) {
 func AddItem(w http.ResponseWriter, req *http.Request) {
 
 	//get user
-	_, fname, uname := config.GetUser(w, req)
-	currUser := models.User{
-		ParentGroup: fname,
-		Name:        uname,
-	}
+	_, currUser := config.GetUser(w, req)
 
 	if req.Method == http.MethodPost {
 		//read response from client
 		newItem := req.FormValue("item")
 		//add new item
-		err := models.InsertItem(w, req, currUser.ParentGroup, newItem, currUser.Name)
+		id, err := models.InsertItem(currUser.ParentGroup, newItem, currUser.Name)
 		if err != nil {
 			fmt.Println(err)
 			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
 		}
 		//sanity check
 		fmt.Println("item:" + newItem + " added by " + currUser.Name)
+		//update list of items
+		fmt.Fprintf(w,
+			`<li> %s - %s
+			<button type="button" class="listButton" id="%s">del</button>
+			</li>`,
+			currUser.Name,
+			newItem,
+			id,
+		)
 	}
+}
+
+//DelItem handles the delete item requests
+func DelItem(w http.ResponseWriter, req *http.Request) {
+
+	if req.Method == http.MethodPost {
+		_, currUser := config.GetUser(w, req)
+
+		//TODO: delte item from db: DONE
+		models.DeleteItem(currUser.ParentGroup, req.FormValue("itemID"))
+		//send back response
+		fmt.Fprintln(w, "item deleted")
+	}
+}
+
+//ViewSellers handler func
+func ViewSellers(w http.ResponseWriter, req *http.Request) {
+
+	sellers, err := models.ReadSellersDB()
+	if err != nil {
+		fmt.Println(err)
+	}
+	config.Tpl.ExecuteTemplate(w, "viewSellers.gohtml", sellers)
 }
 
 //SellerPage handler func
