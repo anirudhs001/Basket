@@ -7,6 +7,9 @@ type User struct {
 }
 
 //Item struct
+//ID: each new item inserted has a random(unique) string id
+//Name: name of user who put in the item
+//Item: name of the item inserted (eg lays)
 type Item struct {
 	ID, Name, Item string
 }
@@ -14,13 +17,4 @@ type Item struct {
 //Seller struct
 type Seller struct {
 	ID, Name, Addr, OpenTime, CloseTime string
-}
-
-type group struct {
-	id    string
-	users []User
-}
-
-func (g group) addUser(u User) {
-	g.users = append(g.users, u)
 }

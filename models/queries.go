@@ -1,13 +1,16 @@
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+	"time"
+)
 
 func updateCustomerRow(s string, name string) error {
 
 	_, err := db.Exec(`
-		UPDATE customers 
-		set items = $1 
-		where name = $2;`,
+	UPDATE customers 
+	set items = $1 
+	where name = $2;`,
 		s,
 		name)
 
@@ -18,9 +21,9 @@ func updateCustomerRow(s string, name string) error {
 func insertSellerRow(s Seller) error {
 
 	_, err := db.Exec(`
-		INSERT into sellers
-		(name, address, opentime, closetime)
-		VALUES ($1, $2, $3, $4);`,
+	INSERT into sellers
+	(name, address, opentime, closetime)
+	VALUES ($1, $2, $3, $4);`,
 		s.Name,
 		s.Addr,
 		s.OpenTime,
@@ -30,7 +33,7 @@ func insertSellerRow(s Seller) error {
 }
 
 //reads DB and sends items in row if found
-// if row not found, creates one too
+// if row not found, creates one and returns an empty string and nil
 // if an error occurs, returns an empty string and the err
 func getCustomerRow(familyName string) (string, error) {
 
@@ -42,7 +45,6 @@ func getCustomerRow(familyName string) (string, error) {
 
 		if err == sql.ErrNoRows { // if row not found
 			//create a new row
-			err = nil
 			_, err = db.Exec("INSERT into customers (name,items) VALUES ($1,$2);", familyName, "")
 			//sanity check
 			if err != nil {
@@ -68,4 +70,18 @@ func getSellerRows(args ...string) (*sql.Rows, error) {
 		rows, err = db.Query("select * from sellers where name=$1;", args[0])
 	}
 	return rows, err
+}
+
+//addRequestToitemsDB adds a new row if items in the items DB
+//returns the error if any; otherwise returns nil
+func addRequestToitemsDB(timeStamp time.Time, familyName string, sellerName string, items string) error {
+
+	_, err := db.Exec(`
+	INSERT INTO items (timestamp, sellername, customername, itemslist)
+	VALUES ($1, $2, $3, $4);`,
+		timeStamp,
+		sellerName,
+		familyName,
+		items)
+	return err
 }

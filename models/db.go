@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strings"
+	"time"
 
 	_ "github.com/lib/pq" //need the init function
 )
@@ -95,7 +96,8 @@ func DeleteItem(familyName string, itemID string) error {
 			if v != "" {
 				id := strings.Split(v, "|")[0]
 				if id == itemID { //delete this row
-					v = ""
+					continue
+					//skip adding this row
 				}
 				sNew += v + "\n"
 			}
@@ -149,4 +151,20 @@ func AddSellerDB(s Seller) error {
 	}
 	//else if err == nil
 	return ErrSellerAlreadyExists
+}
+
+//SendRequestToSeller adds the users items list to "items" database
+func SendRequestToSeller(familyName string, sellerName string) error {
+
+	items, err := getCustomerRow(familyName)
+	if err != nil {
+		return err
+	}
+
+	//add items to db
+	t := time.Now()
+	// timeStamp := t.Format("2/Jan/2006 15:04")
+
+	err = addRequestToitemsDB(t, familyName, sellerName, items)
+	return err
 }

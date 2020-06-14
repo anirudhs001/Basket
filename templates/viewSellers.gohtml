@@ -7,11 +7,13 @@
     </div>
     <ul>
         {{range .}}
-        <li id="{{.Name}}" class="listSellers">
-            {{.Name}}, 
-            {{.Addr}},
-            {{.OpenTime}}-{{.CloseTime}}
-        </li>
+        <div class="listSellers">
+            <li id="{{.Name}}" >
+                {{.Name}}, 
+                {{.Addr}},
+                {{.OpenTime}}-{{.CloseTime}}
+            </li>
+        </div>
         {{end}}
     </ul>
     <!--scripts-->

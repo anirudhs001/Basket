@@ -111,46 +111,27 @@ func ViewSellers(w http.ResponseWriter, req *http.Request) {
 	config.Tpl.ExecuteTemplate(w, "viewSellers.gohtml", sellers)
 }
 
-//SellerPage : main seller page
-func SellerPage(w http.ResponseWriter, req *http.Request) {
+//SendRequestToSeller sends the currUser request to seller
+func SendRequestToSeller(w http.ResponseWriter, req *http.Request) {
 
-	config.Tpl.ExecuteTemplate(w, "sellerPage.gohtml", nil)
-}
+	_, currUser := config.GetUser(w, req)
 
-//SellerRegisterPage handler func
-func SellerRegisterPage(w http.ResponseWriter, req *http.Request) {
-	//TODO add login Page
-
-	var seller models.Seller
-	//store seller info
 	if req.Method == http.MethodPost {
-		seller = models.Seller{
-			Name:      req.FormValue("name"),
-			Addr:      req.FormValue("address"),
-			OpenTime:  req.FormValue("opentime"),
-			CloseTime: req.FormValue("closetime"),
-		}
-		if seller.Name == "" || seller.Addr == "" {
-			fmt.Println("could not recieve seller data")
+
+		sellerName := req.FormValue("sellerName")
+		if sellerName == "" {
 			http.Error(w, "bad request", http.StatusBadRequest)
+			fmt.Println("SendItems: err: could not receive form value")
 			return
 		}
-		config.Tpl.ExecuteTemplate(w, "sellerRegisterPage.gohtml", seller)
 
-		err := models.AddSellerDB(seller)
+		err := models.SendRequestToSeller(currUser.ParentGroup, sellerName)
 		if err != nil {
-			if err == models.ErrSellerAlreadyExists {
-				fmt.Println("seller already exists")
-				fmt.Fprintf(w, "\nseller already exists!")
-			} else {
-				fmt.Println("ERROR occurred in SellerPage")
-				fmt.Println(err)
-				http.Error(w, "internal server error", http.StatusInternalServerError)
-			}
-		} else {
-			fmt.Println("shop added to database:" + seller.Name)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			fmt.Println("SendItems: err: ")
+			fmt.Println(err)
+			return
 		}
-	} else {
-		config.Tpl.ExecuteTemplate(w, "sellerRegisterPage.gohtml", seller)
+		fmt.Fprintln(w, "request sent to seller!")
 	}
 }

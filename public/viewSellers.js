@@ -1,28 +1,32 @@
 
 ;(function() {
 
-    var HttpRequest = new XMLHttpRequest()
-
+    var httpRequest;
+    
     $(".listSellers").click(selectSeller)
-
+    
     function selectSeller() {
-
+        //sanity check
+        console.log("seller selected")
+        
+        httpRequest = new XMLHttpRequest();
         // response handler
-        HttpRequest.onreadystatechange = readResponse;
+        httpRequest.onreadystatechange = readResponse;
 
         // requests
-        HttpRequest.open("post", "/selectSeller");
-        HttpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        var s = $(this).attr(id);
-        HttpRequest.send("name="+s);
+        httpRequest.open("POST", "/sendRequestToSeller");
+        httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        var s = $(this).children("li").attr("id");
+        httpRequest.send("sellerName="+s);
 
         function readResponse() {
-            if (HttpRequest.readyState === XMLHttpRequest.DONE) {
-                if (HttpRequest.status === 200) {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                if (httpRequest.status === 200) {
                     //TODO: do something after receiving response
+                    console.log("request sent to seller!")
                 }
             }
         }
 
     }
-}())
+}());
