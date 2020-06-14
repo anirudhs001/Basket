@@ -13,8 +13,7 @@ type Item struct {
 
 //Seller struct
 type Seller struct {
-	ID, Name, Addr      string
-	OpenTime, CloseTime int
+	ID, Name, Addr, OpenTime, CloseTime string
 }
 
 type group struct {

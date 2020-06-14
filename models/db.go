@@ -72,7 +72,7 @@ func InsertItem(familyName string, item string, user string) (string, error) {
 	id := hex.EncodeToString(b)
 	s = s + id + "|" + user + "|" + item + "\n"
 
-	err = updateRow(s, familyName)
+	err = updateCustomerRow(s, familyName)
 	if err != nil {
 		return "", err
 	}
@@ -103,13 +103,13 @@ func DeleteItem(familyName string, itemID string) error {
 	}
 
 	//write row to db
-	err = updateRow(sNew, familyName)
+	err = updateCustomerRow(sNew, familyName)
 
 	return err
 }
 
-//ReadSellersDB returns a list of sellers
-func ReadSellersDB() ([]Seller, error) {
+//ReadAllSellersDB returns a list of sellers
+func ReadAllSellersDB() ([]Seller, error) {
 
 	var listOfSellers []Seller
 	var s Seller
@@ -120,7 +120,7 @@ func ReadSellersDB() ([]Seller, error) {
 	}
 
 	for rows.Next() {
-		if err = rows.Scan(&s.ID, &s.Name, &s.Addr, &s.OpenTime, &s.CloseTime); err != nil {
+		if err = rows.Scan(&s.Name, &s.Addr, &s.OpenTime, &s.CloseTime); err != nil {
 			return listOfSellers, err
 		}
 		listOfSellers = append(listOfSellers, s)
@@ -128,32 +128,25 @@ func ReadSellersDB() ([]Seller, error) {
 	return listOfSellers, err
 }
 
-//reads DB and sends items in row if found
-// if row not found, creates one too
-// if an error occurs, returns an empty string and the err
-func getCustomerRow(familyName string) (string, error) {
+//AddSellerDB adds the seller to sellers table
+//returns non-nil err if row already exists
+func AddSellerDB(s Seller) error {
 
-	//query the family, create if does not exist
-	row := db.QueryRow("SELECT items from customers where name = $1;", familyName)
-	var err error
-	var s string
-	if err := row.Scan(&s); err != nil {
+	//query to check seller row
+	r := db.QueryRow("SELECT * FROM sellers where name=$1;", s.Name)
 
-		if err == sql.ErrNoRows { // if row not found
-			//create a new row
-			err = nil
-			_, err = db.Exec("INSERT into customers (name,items) VALUES ($1,$2);", familyName, "")
-			//sanity check
-			if err != nil {
-				return "", err
-			}
-		}
+	//try to read row;
+	//returns ErrNoRows if row does not exist
+	var ts Seller
+	err := r.Scan(&ts.Name, &ts.Addr, &ts.OpenTime, &ts.CloseTime)
+	if err == sql.ErrNoRows {
+		//create row
+		err = insertSellerRow(s)
+		return err
 	}
-	return s, err
-}
-
-func getSellerRows() (*sql.Rows, error) {
-
-	rows, err := db.Query("Select * from sellers")
-	return rows, err
+	if err != nil && err != sql.ErrNoRows {
+		return err
+	}
+	//else if err == nil
+	return ErrSellerAlreadyExists
 }

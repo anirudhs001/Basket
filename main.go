@@ -12,8 +12,9 @@ func main() {
 	http.HandleFunc("/customerPage", route.CustomerPage)
 	http.HandleFunc("/addItem", route.AddItem)
 	http.HandleFunc("/delItem", route.DelItem)
-	http.HandleFunc("/viewSellers", route.ViewSellers)
 	http.HandleFunc("/sellerPage", route.SellerPage)
+	http.HandleFunc("/viewSellers", route.ViewSellers)
+	http.HandleFunc("/sellerRegisterPage", route.SellerRegisterPage)
 
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 	//serve the scripts
