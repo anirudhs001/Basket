@@ -6,16 +6,16 @@
         </h2>
     </div>
     <ul>
-        {{if .}}
-            {{range .}}
-            <li>
-                {{.ID}}
-                {{.Name}}, 
-                {{.Addr}},
-                {{.OpenTime}}-{{.CloseTime}}
-            </li>
-            {{end}}
+        {{range .}}
+        <li id="{{.Name}}" class="listSellers">
+            {{.Name}}, 
+            {{.Addr}},
+            {{.OpenTime}}-{{.CloseTime}}
+        </li>
         {{end}}
     </ul>
+    <!--scripts-->
+    <script defer src="/files/jquery-3.5.1.js"></script>
+    <script defer src="/files/viewSellers.js"></script>
 </body>
 </html>

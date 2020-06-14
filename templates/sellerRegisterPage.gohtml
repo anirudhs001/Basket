@@ -1,0 +1,16 @@
+<html>
+    <body>
+        <form method="POST">
+            <input type="text" placeholder="name" name="name">
+            <input type="text" placeholder="address" name="address">
+            <input type="time" placeholder="Open Time" name="opentime">
+            <input type="time" placeholder="Close Time" name="closetime">
+            <input type="submit" name="submit">
+        </form>
+        {{if .}}
+            {{.Name}}
+            {{.Addr}}
+            {{.OpenTime}}-{{.CloseTime}}
+        {{end}}
+    </body>
+</html>
