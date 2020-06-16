@@ -1,24 +1,42 @@
 <html>
-<body>
-    {{template navbar}}
-
-    <div class="card bg-light" id="input">
-        <!--TODO: record new item, send to server: DONE-->
-        <input type="text" id="newItem" placeholder="enter item here">
-        <button type="button" id="addItem">add</button>
-    </div>
-    <div id = "items">
-        <ul id = "list">
+    <head>
+        <link rel="stylesheet" type="text/css" href="/files/bootstrap/css/bootstrap.min.css">
+        <script src="/files/JQuery/jquery-3.5.1.js"></script>
+        <script src="/files/bootstrap/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="/files/stylesheets/customePage.css">
+    </head>
+<body>    
+    {{template "navbar"}}
+    
+    <div class="card bg-light" id="items-list">
+        <div class="card-header">
+            <!--user group info-->
+            <div id="group">
+                <!--TODO-->
+                ParentGroup
+            </div>
+            <div id="user">
+                <!--TODO-->
+                User
+            </div>
+        </div>
+        <div class="row" id="new-input">
+            <!--TODO: record new item, send to server: DONE-->
+            <input type="text" id="newItem" placeholder="What else do you want to buy?">
+            <button type="button" id="addItem">add</button>
+        </div>
+        <div id = "items">
             <!--load all items-->
             {{range .}}
-                <li>{{.Name}} - {{.Item}}
-                    <button type="button" class="listButton" id="{{.ID}}">del</button>
-                </li>
+            <div class="row" id = "list">
+                {{.Name}} {{.Item}}
+                <button type="button" class="listButton" id="{{.ID}}">del</button>
+            </div>
             {{end}}
-        </ul>
-    </div>
-    <div>
-        <a href="/viewSellers">Send to Shop</a>
+        </div>
+        <div>
+            <a href="/viewSellers">Send to Shop</a>
+        </div>
     </div>
     <!--scripts here-->
     <!--JQUERY-->

@@ -1,0 +1,19 @@
+.navbar{ background:#F97300;}
+
+.nav-link , .navbar-brand{
+    color: #302f2f; 
+    cursor: pointer;
+}
+
+.nav-link:hover{ background: rgb(227, 250, 252); color: #f97300; }
+
+.navbar-collapse{ 
+    justify-content: flex-end;
+}
+
+.navbar-toggler{  background:#fff;}
+
+#items-list {
+    margin: 20vh auto;
+    width: 80vw;
+}
