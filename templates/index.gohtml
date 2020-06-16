@@ -1,17 +1,74 @@
 <html>
 <body>
-    <div class="role">
-        <form id = "user" action="/" method="POST">
-            <label for="customer">family</label>
-            <input type="checkbox" name="userType" value="customer">
-            <br>
-            <label for="seller">seller</label>
-            <input type="checkbox" name="userType" value="seller">
-            <br>
-            <input type="text" placeholder="family_name" name="familyName" value="fname">
-            <input type="text" placeholder="user_name" name="userName" value="uname">
-            <input type="submit" value="submit" >
-        </form>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/files/bootstrap/css/bootstrap.min.css"></script>
+        <link rel="stylesheet" type="text/css" href="/files/stylesheets/index.css">
+        <script src="/files/JQuery/jquery-3.5.1.js"></script>
+        <script src="/files/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/files/JS/index.js"></script>
+    </head>
+    <div >
+        {{template "navbar"}}
     </div>
+    
+    <!--USER FORM-->
+    <div class="userInfo card bg-light">
+        <div class="row">
+            
+            <div class="col-3">
+                <div class="nav flex-column nav-pills card-header-tabs mr-3 ml-3 mt-2">
+                    <a class="nav-link active" data-toggle="tab" href="#customer-form" >Customer</a>
+                    <a class="nav-link" data-toggle="tab" href="#seller-form">Seller</a>
+                </div>
+            </div>
+            <div class="tab-content col-9">
+                
+                <div id="customer-form" class="tab-pane fade show active">
+                    <form action="/" method="POST">
+                        <div class="form-group row">
+                            <label for ="familyName" class="col-2">Basket's Name</label>
+                            
+                            <div class="col-8">
+                                <input class="form-control" type="text" id="familyName" placeholder="family_name" name="familyName" required>
+                                <small class="form-text text-muted">People shopping together need to enter the same Basket Name</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label for ="userName">Your Name</label>
+                            </div>
+                            <div class="col-8">
+                                <input class="form-control col" type="text" id="userName" placeholder="user_name" name="userName" required>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row-reverse mr-4">
+                            <!--hidden usertype value-->
+                            <input type="hidden" value="customer" name="userType">
+                            <input id="customer-button" type="submit" value="Submit">
+                        </div>
+                    </form> 
+                </div> 
+                <div id="seller-form" class="tab-pane fade">
+                    <form action="/" method="POST">
+                        <div class="form-group row">
+
+                            <div class="col-2">
+                                <label for="sellerName">Your Name</label>
+                            </div>
+                            <div class="col-8">
+                                <input class="form-control col" type="text" placeholder="Your Name" name="userName" value="uname" required>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row-reverse mr-4">
+                            <!--hidden usertype value-->
+                            <input type="hidden" value="customer" name="userType">
+                            <input type="submit" name="userType" value="Submit">
+                        </div>
+                    </form> 
+                </div>
+            </div>
+        </div> 
+    </div>
+    <!-- USER FORM END-->  
 </body>
 </html>
