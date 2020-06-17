@@ -1,48 +1,56 @@
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="/files/bootstrap/css/bootstrap.min.css">
-        <script src="/files/JQuery/jquery-3.5.1.js"></script>
-        <script src="/files/bootstrap/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="/files/stylesheets/customePage.css">
-    </head>
+<head>
+    <script src="/files/JQuery/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="/files/bootstrap/css/bootstrap.min.css">
+    <script src="/files/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/files/stylesheets/customerPage.css">
+    <script defer src ="/files/JS/customerPage.js"></script>
+    
+    <!--icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 <body>    
     {{template "navbar"}}
     
-    <div class="card bg-light" id="items-list">
-        <div class="card-header">
+    <div class="container card bg-light w-80" id="items-list">
+        <div class="card-header row justify-content-between">
             <!--user group info-->
-            <div id="group">
+            <div class="text-left" id="group">
                 <!--TODO-->
-                ParentGroup
+                <h3>ParentGroup</h3>
             </div>
-            <div id="user">
+            <div class="text-right " id="user">
                 <!--TODO-->
-                User
+                <h4>User</h4>
             </div>
         </div>
-        <div class="row" id="new-input">
+        
+        <div class="row w-80 mt-2" id="new-input">
             <!--TODO: record new item, send to server: DONE-->
-            <input type="text" id="newItem" placeholder="What else do you want to buy?">
-            <button type="button" id="addItem">add</button>
+            <input class="form-control col-8 mt-2 mx-auto" type="text" id="new-item" placeholder="What else do you want to buy?">
+            <button class="btn btn-success col-3 mt-auto mx-auto" type="button" id="add-item">Add to cart</button>  
         </div>
-        <div id = "items">
+        <div class="col mt-2" id="items">
             <!--load all items-->
             {{range .}}
-            <div class="row" id = "list">
-                {{.Name}} {{.Item}}
-                <button type="button" class="listButton" id="{{.ID}}">del</button>
+            <div class="row mx-auto mt-2" id="list">
+                <div class="col-3 mx-auto" id="listItem-user">
+                    {{.Name}}
+                </div>
+                <div class="col-3 mx-auto" id="listItem-item">
+                    {{.Item}}
+                </div>
+                <button class="btn btn-outline-danger btn-md list-button" type="button" id="{{.ID}}">Delete</button>
             </div>
             {{end}}
         </div>
-        <div>
-            <a href="/viewSellers">Send to Shop</a>
+        <div class="w-80 d-flex align-items-end flex-row" id="submit-btn-container">
+            <div class="ml-auto p-2">
+                <a class="btn btn-primary" href="/viewSellers" id="submit-btn">
+                    <i class="fa fa-paper-plane fa-lg mt-2 mr-1"></i>
+                </a>
+            </div>
         </div>
     </div>
-    <!--scripts here-->
-    <!--JQUERY-->
-    <script defer src ="/files/JQuery/jquery-3.5.1.js"></script>
-    <script defer src ="/files/JS/customerPage.js"></script>
-    <!--custom js-->
-    <!--scripts end here-->
 </body>
 </html>

@@ -75,14 +75,8 @@ func AddItem(w http.ResponseWriter, req *http.Request) {
 		//sanity check
 		fmt.Println("item:" + newItem + " added by " + currUser.Name)
 		//update list of items
-		fmt.Fprintf(w,
-			`<li> %s - %s
-			<button type="button" class="listButton" id="%s">del</button>
-			</li>`,
-			currUser.Name,
-			newItem,
-			id,
-		)
+		req.Header.Set("Content-Type", "text/html;charset=utf-8")
+		fmt.Fprintf(w, `<div class="row mx-auto mt-2" id="list"><div class="col-3 mx-auto" id="listItem-user">`+currUser.Name+`</div><div class="col-3 mx-auto" id="listItem-item">`+newItem+`</div><button class="btn btn-outline-danger btn-md list-button" type="button" id="`+id+`">Delete</button></div>`)
 	}
 }
 

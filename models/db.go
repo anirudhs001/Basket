@@ -71,7 +71,7 @@ func InsertItem(familyName string, item string, user string) (string, error) {
 	b := make([]byte, 5)
 	rand.Read(b)
 	id := hex.EncodeToString(b)
-	s = s + id + "|" + user + "|" + item + "\n"
+	s = id + "|" + user + "|" + item + "\n" + s
 
 	err = updateCustomerRow(s, familyName)
 	if err != nil {
