@@ -1,0 +1,39 @@
+.navbar{ background:#F97300;}
+
+.nav-link , .navbar-brand{
+    color: #302f2f; 
+    cursor: pointer;
+}
+
+.nav-link:hover{ background: rgb(227, 250, 252); color: #f97300; }
+
+.navbar-collapse{ 
+    justify-content: flex-end;
+}
+
+.navbar-toggler{  background:#fff;}
+
+
+.card {
+    width: 80vw;
+    top: 20vh;
+    left: 50%;
+    margin-left: -40vw;
+}
+
+.list-group {
+    cursor: pointer;
+}
+
+.shop-timing {
+    font-size: small;
+    color: grey;
+}
+
+.alerts {
+    width: 80vw;
+    position: absolute;
+    top: 10vh;
+    left: 50%;
+    margin-left: -40vw;
+}

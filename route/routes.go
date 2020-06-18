@@ -11,24 +11,34 @@ import (
 //Index page
 func Index(w http.ResponseWriter, req *http.Request) {
 
+	var userType string
+	_, userExists, _ := config.UserExists(req)
+
+	//TODO :if user already exists, reroute to customer page :DONE
+	if userExists == true {
+		userType, _ = config.GetUser(w, req)
+	}
+
 	if req.Method == http.MethodPost { //form sent via post
-		userType := req.FormValue("userType")
-		familyName := req.FormValue("familyName")
-		userName := req.FormValue("userName")
 
-		//TODO: set cookie: DONE
-		config.SetUserType(w, req, userType, familyName, userName)
+		if userExists == false { //user does not exist; create user
 
-		if userType == "customer" {
-			fmt.Println("user redirected to customer Page")
-			http.Redirect(w, req, "/customerPage", http.StatusTemporaryRedirect)
+			userType = req.FormValue("userType")
+			familyName := req.FormValue("familyName")
+			userName := req.FormValue("userName")
+			//TODO: set cookie: DONE
+			config.SetUserType(w, req, userType, familyName, userName)
 		}
+	}
 
-		if userType == "seller" {
-			fmt.Println("user redirected to seller Page")
-			http.Redirect(w, req, "/sellerPage", http.StatusTemporaryRedirect)
-		}
+	if userType == "customer" {
+		fmt.Println("user redirected to customer Page")
+		http.Redirect(w, req, "/customerPage", http.StatusTemporaryRedirect)
+	}
 
+	if userType == "seller" {
+		fmt.Println("user redirected to seller Page")
+		http.Redirect(w, req, "/sellerPage", http.StatusTemporaryRedirect)
 	}
 	//execute template
 	config.Tpl.ExecuteTemplate(w, "index.gohtml", nil)
@@ -53,7 +63,12 @@ func CustomerPage(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 	}
 	//display items in page
-	config.Tpl.ExecuteTemplate(w, "customerPage.gohtml", shoppingList)
+	//add currUser data
+	type st struct {
+		User models.User
+		List []models.Item
+	}
+	config.Tpl.ExecuteTemplate(w, "customerPage.gohtml", st{User: currUser, List: shoppingList})
 }
 
 //AddItem handles the requests to add items
@@ -128,4 +143,14 @@ func SendRequestToSeller(w http.ResponseWriter, req *http.Request) {
 		}
 		fmt.Fprintln(w, "request sent to seller!")
 	}
+}
+
+//SignOut removes the user_info cookie and reroutes to index page
+func SignOut(w http.ResponseWriter, req *http.Request) {
+
+	err := config.DeleteUser(w, req)
+	if err != nil {
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+	}
+	http.Redirect(w, req, "/", http.StatusSeeOther)
 }

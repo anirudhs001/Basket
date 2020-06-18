@@ -1,10 +1,13 @@
 <html>
 <body>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
         <link rel="stylesheet" type="text/css" href="/files/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="/files/stylesheets/index.css">
         <script src="/files/JQuery/jquery-3.5.1.js"></script>
         <script src="/files/bootstrap/js/bootstrap.min.js"></script>
+        
     </head>
     <div >
         {{template "navbar"}}
@@ -60,7 +63,7 @@
                         </div>
                         <div class="d-flex flex-row-reverse mr-4">
                             <!--hidden usertype value-->
-                            <input type="hidden" value="customer" name="userType">
+                            <input type="hidden" value="seller" name="userType">
                             <input type="submit" name="userType" value="Submit">
                         </div>
                     </form> 

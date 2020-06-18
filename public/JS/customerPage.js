@@ -1,7 +1,11 @@
 
 ;(function() {
+    
+    //sanity check
+    console.log("js loaded");
+
     var httpRequest;
-    $("#add-item").click(sendData)
+    $(document).on("click", "#add-item", sendData);
     
     function sendData() {
         

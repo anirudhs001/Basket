@@ -11,7 +11,7 @@ import (
 //GetCookie returns a cookie
 func GetCookie(w http.ResponseWriter, req *http.Request) *http.Cookie {
 
-	c, err := req.Cookie("user_info")
+	c, _, err := UserExists(req)
 	if err == http.ErrNoCookie { //create cookie
 		sID, _ := uuid.NewV4()
 		c = &http.Cookie{
@@ -55,4 +55,28 @@ func GetUser(w http.ResponseWriter, req *http.Request) (string, models.User) {
 		Name:        uName,
 	}
 	return uType, u
+}
+
+//UserExists returns true if user exists, false otherwise and the error, if any.
+func UserExists(req *http.Request) (*http.Cookie, bool, error) {
+
+	c, err := req.Cookie("user_info")
+	if err != nil {
+		return c, false, err
+	}
+	return c, true, nil
+}
+
+//DeleteUser deletes the user_info cookie(if exists). returns error if any
+func DeleteUser(w http.ResponseWriter, req *http.Request) error {
+
+	c, userExists, err := UserExists(req)
+	if err != nil {
+		return err
+	}
+	if userExists {
+		c.MaxAge = -1
+		http.SetCookie(w, c)
+	}
+	return nil
 }

@@ -1,23 +1,39 @@
 <html>
-<body>
-    <div>
-        <h2>
-            Sellers in you area
-        </h2>
-    </div>
-    <ul>
-        {{range .}}
-        <div class="listSellers">
-            <li id="{{.Name}}" >
-                {{.Name}}, 
-                {{.Addr}},
-                {{.OpenTime}}-{{.CloseTime}}
-            </li>
-        </div>
-        {{end}}
-    </ul>
-    <!--scripts-->
-    <script defer src="/files/JQuery/jquery-3.5.1.js"></script>
+<head>
+    <script src="/files/JQuery/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="/files/bootstrap/css/bootstrap.min.css">
+    <script src="/files/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/files/stylesheets/viewSellers.css">
     <script defer src="/files/JS/viewSellers.js"></script>
+</head>
+<body>
+    {{template "navbar"}}
+    
+    <div class="alerts">
+        <!--alerts if any, added via javascript-->
+    </div>
+
+    <!--selllers list-->
+    <div class="card" >
+        <div class="card-header">
+            <h3><b>Shops Near You</b></h3>
+        </div>
+        <ul class="list-group list-group-flush">
+            {{range .}}
+            <li class="list-group-item btn btn-outline-dark col" id="{{.Name}}">
+                <div class="row shop-title">
+                    <h3>{{.Name}}</h3>
+                </div>
+                <div class="row shop-address">
+                    {{.Addr}}
+                </div> 
+                <div class="row shop-timing">
+                    {{.OpenTime}}-{{.CloseTime}}
+                </div>
+            </li>
+            {{end}}
+        </ul>
+    </div>
+    <!--sellers list end-->
 </body>
 </html>

@@ -1,16 +1,15 @@
 
-
 ;(function() {
 
     var httpRequest;
 
-    $(document).on("click", "li", selectSeller);
+    $(document).on("click", "div#sign-out-btn", signOut);
     
-    function selectSeller() {
+    function signOut() {
         
         var self = this;
         //sanity check
-        console.log("seller selected");
+        console.log("sign out btn presssed");
         
         httpRequest = new XMLHttpRequest();
         // response handler
@@ -19,9 +18,7 @@
         // requests
         httpRequest.open("POST", "/sendRequestToSeller");
         httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        var s = $(self).attr("id");
-        httpRequest.send("sellerName="+s);
-        
+        httpRequest.send("sign out user") 
         function readResponse() {
             if (httpRequest.readyState === XMLHttpRequest.DONE) {
                 if (httpRequest.status === 200) {
