@@ -154,3 +154,13 @@ func SignOut(w http.ResponseWriter, req *http.Request) {
 	}
 	http.Redirect(w, req, "/", http.StatusSeeOther)
 }
+
+//ViewOrders
+func ViewOrders(w http.ResponseWriter, req *http.Request) {
+
+	shoppingLists, err := models.GetUserLists(req)
+	if err != nil {
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+	}
+	config.Tpl.ExecuteTemplate(w, "viewOrders.gohtml", shoppingLists)
+}

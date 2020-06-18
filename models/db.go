@@ -168,3 +168,25 @@ func SendRequestToSeller(familyName string, sellerName string) error {
 	err = addRequestToitemsDB(t, familyName, sellerName, items)
 	return err
 }
+
+//ViewSellers returns all rows with matching familyName and an error if any
+func ViewSellers(familyName string) ([]ShoppingList, error) {
+
+	var list []ShoppingList
+	var s ShoppingList
+	rows, err := db.Query("SELECT * from items where name=$1;", familyName)
+
+	if err != nil {
+		return list, err
+	}
+
+	for rows.Next() {
+		rows.Scan(&s.FamilyName, &s.Shop, &s.Date)
+		list = append(list, s)
+	}
+
+	if err = rows.Err(); err != nil {
+		return list, err
+	}
+
+}

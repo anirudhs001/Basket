@@ -1,0 +1,39 @@
+<html>
+<head>
+    <!--TODO:remove unnecessary items from bootstrap-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/files/JQuery/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="/files/bootstrap/css/bootstrap.min.css">
+    <script src="/files/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/files/stylesheets/customerPage.css">
+    <script src="/files/JS/viewOrders.js"></script> 
+    
+    <!--icons-->
+    <!--TODO: replace cdn of icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>    
+    {{template "navbar"}}
+    
+    <div class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Sent on</th>
+                <th scope="col">Shop</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range.}}
+            <th scope="row">
+                <td>{{.i}}</td>
+                <td>{{.Name}}</td>
+                <td>{{.Date}}</td>
+                <td>{{.Shop}}</td>
+            </th>
+            {{end}}
+        </tbody>
+    </div>
+</body>
+</html>
