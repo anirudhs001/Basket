@@ -17,6 +17,7 @@ func main() {
 	http.HandleFunc("/sellerRegisterPage", route.SellerRegisterPage)
 	http.HandleFunc("/sendRequestToSeller", route.SendRequestToSeller)
 	http.HandleFunc("/signOut", route.SignOut)
+	http.HandleFunc("/viewOrders", route.ViewOrders)
 	//TODO: add favicon
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 	//serve the scripts

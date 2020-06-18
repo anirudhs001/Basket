@@ -10,15 +10,47 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">  
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" id="sign-out-btn" href="/about">About</a>
+                <a class="nav-link" id="sign-out-btn" href="/signOut">Sign Out</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/">Feedback</a>        
+                <a class="nav-link" href="/viewOrders">Orders</a>        
             </li>  
-            <li class="nav-item">  
-                <a class="nav-link " href="/howtos">How to Use this page</a>     
+            <li class="nav-item">
+                <a class="nav-link" href="/customerPage">New List</a>        
             </li>  
-            <li class="nav-item"> 
+            <li class="nav-item">  <!--TODO-->
+                <a class="nav-link " href="#">How to Use this page</a>     
+            </li>  
+            <li class="nav-item"> <!--TODO-->
+                <a class="nav-link " data-value="contact" href="#">Contact</a>    
+            </li> 
+        </ul> 
+    </div>
+</nav>
+
+{{end}}
+
+{{define "sellerNavbar"}}
+
+<!-- navbar -->  
+<nav class="navbar navbar-expand-lg fixed-top">  
+    <a class="navbar-brand" href="/">Basket</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">  
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" id="sign-out-btn" href="/signOut">Sign Out</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/viewOrders">View Orders</a>        
+            </li>  
+            <li class="nav-item">  <!--TODO-->
+                <a class="nav-link " href="#">How to Use this page</a>     
+            </li>  
+            <li class="nav-item"> <!--TODO-->
                 <a class="nav-link " data-value="contact" href="#">Contact</a>    
             </li> 
         </ul> 

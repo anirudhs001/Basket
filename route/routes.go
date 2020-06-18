@@ -47,8 +47,15 @@ func Index(w http.ResponseWriter, req *http.Request) {
 //CustomerPage handlerfunc
 func CustomerPage(w http.ResponseWriter, req *http.Request) {
 
+	if _, userExists, _ := config.UserExists(req); !userExists {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
+	}
 	//get user data
-	_, currUser := config.GetUser(w, req)
+	userType, currUser := config.GetUser(w, req)
+	if userType != "customer" {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
 
 	//sanity check
 	fmt.Println("user accesed page: " + currUser.Name)
@@ -112,6 +119,15 @@ func DelItem(w http.ResponseWriter, req *http.Request) {
 //returns all shops registered on website
 func ViewSellers(w http.ResponseWriter, req *http.Request) {
 
+	if _, userExists, _ := config.UserExists(req); !userExists {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
+	}
+	userType, _ := config.GetUser(w, req)
+	if userType != "customer" {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
 	sellers, err := models.ReadAllSellersDB()
 	if err != nil {
 		fmt.Println(err)
@@ -155,12 +171,24 @@ func SignOut(w http.ResponseWriter, req *http.Request) {
 	http.Redirect(w, req, "/", http.StatusSeeOther)
 }
 
-//ViewOrders
+//ViewOrders shows all previous orders
 func ViewOrders(w http.ResponseWriter, req *http.Request) {
 
-	shoppingLists, err := models.GetUserLists(req)
+	if _, userExists, _ := config.UserExists(req); !userExists {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
+	}
+	userType, currUser := config.GetUser(w, req)
+	if userType != "customer" {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	shoppingLists, err := models.ViewOrdersitemsDB(currUser.ParentGroup)
+
 	if err != nil {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
+		fmt.Println(err)
+		return
 	}
 	config.Tpl.ExecuteTemplate(w, "viewOrders.gohtml", shoppingLists)
 }

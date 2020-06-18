@@ -169,8 +169,8 @@ func SendRequestToSeller(familyName string, sellerName string) error {
 	return err
 }
 
-//ViewSellers returns all rows with matching familyName and an error if any
-func ViewSellers(familyName string) ([]ShoppingList, error) {
+//ViewOrdersitemsDB returns a slice of all rows with matching familyName and an error if any
+func ViewOrdersitemsDB(familyName string) ([]ShoppingList, error) {
 
 	var list []ShoppingList
 	var s ShoppingList
@@ -185,8 +185,7 @@ func ViewSellers(familyName string) ([]ShoppingList, error) {
 		list = append(list, s)
 	}
 
-	if err = rows.Err(); err != nil {
-		return list, err
-	}
+	err = rows.Err()
 
+	return list, err
 }
