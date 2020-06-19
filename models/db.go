@@ -169,23 +169,72 @@ func SendRequestToSeller(familyName string, sellerName string) error {
 	return err
 }
 
-//ViewOrdersitemsDB returns a slice of all rows with matching familyName and an error if any
-func ViewOrdersitemsDB(familyName string) ([]ShoppingList, error) {
+//ReadOrdersByCustomerITEMSDB returns a slice of all rows with matching familyName and an error if any
+func ReadOrdersByCustomerITEMSDB(familyName string) ([]Order, error) {
 
-	var list []ShoppingList
-	var s ShoppingList
-	rows, err := db.Query("SELECT * from items where name=$1;", familyName)
-
+	var list []Order
+	var s Order
+	rows, err := db.Query("SELECT timeStamp, sellername, customername from items where customername=$1;", familyName)
 	if err != nil {
 		return list, err
 	}
 
 	for rows.Next() {
-		rows.Scan(&s.FamilyName, &s.Shop, &s.Date)
+		rows.Scan(&s.Date, &s.Shop, &s.FamilyName)
 		list = append(list, s)
 	}
 
 	err = rows.Err()
 
 	return list, err
+}
+
+//ReadOrdersToSellerITEMSDB returns all items orders sent to the seller
+func ReadOrdersToSellerITEMSDB(sellerName string) ([]ShoppingList, error) {
+
+	var list []ShoppingList
+	var s ShoppingList
+	rows, err := db.Query("SELECT timeStamp, customername, items from items where sellername=$1;", sellerName)
+	if err != nil {
+		return list, err
+	}
+	var items string
+	for rows.Next() {
+		rows.Scan(&s.Date, &s.FamilyName, &items)
+		//split items and add to shopping list
+		if items != "" {
+			li := strings.Split(items, "\n")
+			for _, v := range li {
+				if v != "" {
+					temp := strings.Split(v, "|")
+					if len(temp) >= 2 {
+						item := strings.Split(v, "|")[2]
+						s.Items = append(s.Items, item)
+					}
+				}
+			}
+		}
+		//add order to list
+		list = append(list, s)
+	}
+	//rows does not return any error on scan, need to check explicitly
+	err = rows.Err()
+
+	return list, err
+}
+
+// ReadSellerDetailsITEMSDB returns the shop details
+func ReadSellerDetailsITEMSDB(sellerName string) (Seller, error) {
+
+	var shop Seller
+	rows, err := getSellerRows(sellerName)
+	if err != nil {
+		return shop, err
+	}
+	for rows.Next() {
+		rows.Scan(&shop.Name, &shop.Addr, &shop.OpenTime, &shop.CloseTime)
+	}
+	err = rows.Err()
+	return shop, err
+
 }

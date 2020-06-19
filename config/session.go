@@ -32,6 +32,9 @@ func SetUserType(w http.ResponseWriter, req *http.Request, uType string, fName s
 	_, err := req.Cookie("user_info")
 	if err == http.ErrNoCookie {
 
+		if fName == "" {
+			fName = uName
+		}
 		c := GetCookie(w, req)
 		c.Value = c.Value + `|` + uType + `|` + fName + `|` + uName
 		http.SetCookie(w, c)
@@ -46,9 +49,12 @@ func GetUser(w http.ResponseWriter, req *http.Request) (string, models.User) {
 
 	temp := c.Value
 	l := strings.Split(temp, "|")
+
 	uType := l[1]
-	fName := l[2]
-	uName := l[3]
+	var uName, fName string
+
+	fName = l[2]
+	uName = l[3]
 
 	u := models.User{
 		ParentGroup: fName,

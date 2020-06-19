@@ -1,76 +1,79 @@
 <html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" type="text/css" href="/files/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/files/stylesheets/index.css">
+    <script src="/files/JQuery/jquery-3.5.1.js"></script>
+    <script src="/files/bootstrap/js/bootstrap.min.js"></script>
+    
+</head>
 <body>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <link rel="stylesheet" type="text/css" href="/files/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="/files/stylesheets/index.css">
-        <script src="/files/JQuery/jquery-3.5.1.js"></script>
-        <script src="/files/bootstrap/js/bootstrap.min.js"></script>
-        
-    </head>
     <div >
         {{template "navbar"}}
     </div>
     
-    <!--USER FORM-->
-    <div class="userInfo card bg-light">
-        <div class="row">
-            
-            <div class="col-3">
-                <div class="nav flex-column nav-pills card-header-tabs mr-3 ml-3 mt-2">
-                    <a class="nav-link active" data-toggle="tab" href="#customer-form" >Customer</a>
-                    <a class="nav-link" data-toggle="tab" href="#seller-form">Seller</a>
-                </div>
-            </div>
-            <div class="tab-content col-9">
+    <div class="container">
+        
+        <!--USER FORM-->
+        <div class="userInfo card bg-dark">
+            <div class="row">
                 
-                <div id="customer-form" class="tab-pane fade show active">
-                    <form action="/" method="POST">
-                        <div class="form-group row">
-                            <label for ="familyName" class="col-2">Basket's Name</label>
-                            
-                            <div class="col-8">
-                                <input class="form-control" type="text" id="familyName" placeholder="family_name" name="familyName" required>
-                                <small class="form-text text-muted">People shopping together need to enter the same Basket Name</small>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <label for ="userName">Your Name</label>
-                            </div>
-                            <div class="col-8">
-                                <input class="form-control col" type="text" id="userName" placeholder="user_name" name="userName" required>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-row-reverse mr-4">
-                            <!--hidden usertype value-->
-                            <input type="hidden" value="customer" name="userType">
-                            <input id="customer-button" type="submit" value="Submit">
-                        </div>
-                    </form> 
-                </div> 
-                <div id="seller-form" class="tab-pane fade">
-                    <form action="/" method="POST">
-                        <div class="form-group row">
-
-                            <div class="col-2">
-                                <label for="sellerName">Your Name</label>
-                            </div>
-                            <div class="col-8">
-                                <input class="form-control col" type="text" placeholder="Your Name" name="userName" value="uname" required>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-row-reverse mr-4">
-                            <!--hidden usertype value-->
-                            <input type="hidden" value="seller" name="userType">
-                            <input type="submit" name="userType" value="Submit">
-                        </div>
-                    </form> 
+                <div class="col-3">
+                    <div class="nav flex-column nav-pills card-header-tabs mr-3 ml-3 mt-2">
+                        <a class="nav-link active tab-heading" data-toggle="tab" href="#customer-form" >Customer</a>
+                        <a class="nav-link tab-heading" data-toggle="tab" href="#seller-form">Seller</a>
+                    </div>
                 </div>
-            </div>
-        </div> 
+                <div class="tab-content col-9">
+                    
+                    <div id="customer-form" class="tab-pane fade show active">
+                        <form action="/" method="POST">
+                            <div class="form-group row">
+                                <label for ="familyName" class="col-2">Basket's Name</label>
+                                
+                                <div class="col-8">
+                                    <input class="form-control" type="text" id="familyName" placeholder="family_name" name="familyName" required>
+                                    <small class="form-text text-muted">People shopping together need to enter the same Basket Name</small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-2">
+                                    <label for ="userName">Your Name</label>
+                                </div>
+                                <div class="col-8">
+                                    <input class="form-control col" type="text" id="userName" placeholder="user_name" name="userName" required>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row-reverse mr-4">
+                                <!--hidden usertype value-->
+                                <input type="hidden" value="customer" name="userType">
+                                <input class="btn btn-success" id="customer-button" type="submit" value="Submit">
+                            </div>
+                        </form> 
+                    </div> 
+                    <div id="seller-form" class="tab-pane fade">
+                        <form action="/" method="POST">
+                            <div class="form-group row">
+                                
+                                <div class="col-2">
+                                    <label for="sellerName">Your Name</label>
+                                </div>
+                                <div class="col-8">
+                                    <input class="form-control col" type="text" placeholder="Your Name" name="userName" value="uname" required>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row-reverse mr-4">
+                                <!--hidden usertype value-->
+                                <input type="hidden" value="seller" name="userType">
+                                <input type="submit" name="userType" value="Submit">
+                            </div>
+                        </form> 
+                    </div>
+                </div>
+            </div> 
+        </div>
+        <!-- USER FORM END-->  
     </div>
-    <!-- USER FORM END-->  
 </body>
 </html>

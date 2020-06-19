@@ -14,9 +14,16 @@ type Item struct {
 	ID, Name, Item string
 }
 
+//Order struct
+type Order struct {
+	FamilyName, Shop, Date string
+}
+
 //ShoppingList struct
 type ShoppingList struct {
-	FamilyName, Shop, Date string
+	Date       string
+	FamilyName string
+	Items      []string
 }
 
 //Seller struct

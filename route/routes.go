@@ -176,15 +176,17 @@ func ViewOrders(w http.ResponseWriter, req *http.Request) {
 
 	if _, userExists, _ := config.UserExists(req); !userExists {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		fmt.Println("user not yet signed in. redirected to /")
 		return
 	}
 	userType, currUser := config.GetUser(w, req)
 	if userType != "customer" {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
+		fmt.Println("user not customer. redirected to /")
+		return
 	}
 
-	shoppingLists, err := models.ViewOrdersitemsDB(currUser.ParentGroup)
-
+	shoppingLists, err := models.ReadOrdersByCustomerITEMSDB(currUser.ParentGroup)
 	if err != nil {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 		fmt.Println(err)

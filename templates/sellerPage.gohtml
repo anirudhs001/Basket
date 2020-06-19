@@ -5,7 +5,7 @@
     <script src="/files/JQuery/jquery-3.5.1.js"></script>
     <link rel="stylesheet" type="text/css" href="/files/bootstrap/css/bootstrap.min.css">
     <script src="/files/bootstrap/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/files/stylesheets/customerPage.css">
+    <link rel="stylesheet" href="/files/stylesheets/sellerPage.css">
     <script src="/files/JS/customerPage.js"></script> 
     
     <!--TODO: replace cdn of icons-->
@@ -15,75 +15,43 @@
     <!--Navbar-->
     {{template "sellerNavbar"}}
     
-    <!--register new shop-->
-    <a href = "/sellerRegisterPage">Register seller</a>
-    
-    <!--LIST-->
-    <div class="container card bg-light w-80" id="items-list">
-        <!--shop address--> 
-        {{$shop := .Shop}}
-        {{$shoppingList := .List}}
-        <div class="card-header row justify-content-between">
-            <!--user group info-->
-            <div class="row shop-title">
+    <div class="main-content">
+        
+        <!--LIST-->
+        <div class="card">
+            <!--shop address--> 
+            {{$shop := .Shop}}
+            <div class="card-header">
+                <!--user group info-->
                 <h3>{{$shop.Name}}</h3>
-            </div>
-            <div class="row shop-address">
                 {{$shop.Addr}}
-            </div> 
-            <div class="row shop-timing">
+                <br>
                 {{$shop.OpenTime}}-{{$shop.CloseTime}}
             </div>
         </div>
-    </div>
-    <!--end shop address--> 
-    <!--show all received orders-->
-    <div class="accordion">
-        <div class="card">
-            {{range.}}
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <button class="btn btn-outline-secondary" data-toggle="collapse">
-                        {{.Name}}
-                    </button>
-                </h5>
-            </div>
-            
-            <div class="collapse">
-                <div class="card-body">
-                    {{range.Items}}
-                    <div>
-                        {{.}}
+        <!--end shop address--> 
+        <!--show all received orders-->
+        <div class="accordion">
+            {{range $i, $shoppingList := .List}}
+            <div class="card w-80">
+                <div class="card-header" data-toggle="collapse" data-target="#body{{$i}}">
+                    <h5>
+                        {{$shoppingList.FamilyName}}
+                    </h5>
+                </div>
+                
+                <div class="collapse" id="body{{$i}}">
+                    <div class="card-body">
+                        {{range $shoppingList.Items}}
+                        {{.}},
+                        {{end}}
                     </div>
-                    {{end}}
                 </div>
             </div>
             {{end}}
         </div>
+        
     </div>
-    
-    <div class="col mt-2" id="items">
-        <!--load all items-->
-        {{range $shoppingList}}
-        <div class="row mx-auto mt-2" id="list">
-            <div class="col-3 mx-auto" id="listItem-user">
-                {{.Name}}
-            </div>
-            <div class="col-3 mx-auto" id="listItem-item">
-                {{.Item}}
-            </div>
-            <button class="btn btn-outline-danger btn-md list-button" type="button" id="{{.ID}}">Delete</button>
-        </div>
-        {{end}}
-    </div>        <div class="w-80 d-flex align-items-end flex-row" id="submit-btn-container">
-        <div class="ml-auto p-2">
-            <a class="btn btn-primary" href="/viewSellers" id="submit-btn">
-                <i class="fa fa-paper-plane fa-lg mt-2 mr-1"></i>
-            </a>
-        </div>
-    </div>
-</div>
-<!---LIST END-->
-
+    <!---LIST END-->
 </body>
 </html>

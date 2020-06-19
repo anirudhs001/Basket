@@ -67,7 +67,7 @@ func getSellerRows(args ...string) (*sql.Rows, error) {
 		rows, err = db.Query("Select * from sellers;")
 	}
 	if len(args) == 1 { //seller name sent
-		rows, err = db.Query("select * from sellers where name=$1;", args[0])
+		rows, err = db.Query("Select * from sellers where name=$1;", args[0])
 	}
 	return rows, err
 }
@@ -84,4 +84,15 @@ func addRequestToitemsDB(timeStamp time.Time, familyName string, sellerName stri
 		familyName,
 		items)
 	return err
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+//								most basic queries
+/////////////////////////////////////////////////////////////////////////////////////////
+
+//TODO
+
+//Select returns a *row and error
+func Select(db string, cols []string, where []string) *sql.Row {
+	return nil
 }

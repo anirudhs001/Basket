@@ -11,7 +11,43 @@ import (
 //SellerPage : main seller page
 func SellerPage(w http.ResponseWriter, req *http.Request) {
 
-	config.Tpl.ExecuteTemplate(w, "sellerPage.gohtml", nil)
+	if _, userExists, _ := config.UserExists(req); !userExists {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
+	}
+	//get current user(seller) details
+	userType, currUser := config.GetUser(w, req)
+	if userType != "seller" {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	//TODO: send shop details and all orders
+	//1) get shop details
+	shopDetails, err := models.ReadSellerDetailsITEMSDB(currUser.Name)
+	if err != nil {
+		fmt.Println("SellerPage: err:")
+		fmt.Println(err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
+	}
+	//2) get all orders: DONE
+	ordersList, err := models.ReadOrdersToSellerITEMSDB(currUser.Name)
+	if err != nil {
+		fmt.Println("SellerPage: err:")
+		fmt.Println(err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	type data struct {
+		Shop models.Seller
+		List []models.ShoppingList
+	}
+
+	//sanity check
+	fmt.Println(shopDetails)
+	fmt.Println(ordersList)
+	config.Tpl.ExecuteTemplate(w, "sellerPage.gohtml", data{Shop: shopDetails, List: ordersList})
 }
 
 //SellerRegisterPage handler func
