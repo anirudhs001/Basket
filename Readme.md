@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <h1>Basket </h1>  
 A basic website written in golang(mostly) to ease offline shopping.
 
