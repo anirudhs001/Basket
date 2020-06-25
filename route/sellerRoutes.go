@@ -45,8 +45,6 @@ func SellerPage(w http.ResponseWriter, req *http.Request) {
 	}
 
 	//sanity check
-	fmt.Println(shopDetails)
-	fmt.Println(ordersList)
 	config.Tpl.ExecuteTemplate(w, "sellerPage.gohtml", data{Shop: shopDetails, List: ordersList})
 }
 
