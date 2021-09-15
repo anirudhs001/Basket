@@ -12,11 +12,9 @@ user's items-lists and seller data is stored across multiple postgres tables
 <h2>What needs work</h2>
 
 <ul>
-    <li>changing the ui(cuz it sucks ig?)</li>
+    <li>Improve the UI</li>
     <li>seller registration page</li>
-        the backend's done; but it's still an ugly page with just 4 input boxes
-    <li>keep track of items added</li>      
-        there's no way yet to keep track of the items added to shopping baskets by the shopkeepers
+        the backend's done; but it's still a simple page with just 4 input boxes
     <li>customer can't view available items in shop</li>
         customers can't yet view the items which were available at the shop
 
