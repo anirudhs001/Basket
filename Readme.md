@@ -1,5 +1,5 @@
 <h1>Basket </h1>  
-A basic website written in golang(mostly) and JS to ease offline shopping.
+A basic website written in golang and JS to ease offline shopping.
 
 To see in action, run the executable as: ./Basket and goto localhost:8080
 
